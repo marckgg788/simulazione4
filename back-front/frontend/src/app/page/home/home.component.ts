@@ -1,9 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { BehaviorSubject, catchError, of, switchMap } from 'rxjs';
-import { AuthService } from '../../service/auth.service';
-import { RequestService } from '../../service/request.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AddRequestModal } from '../../components/add-request-modal/add-request-modal';
+import { DeliveryService } from '../../service/delivery.service';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -13,85 +10,34 @@ import { AddRequestModal } from '../../components/add-request-modal/add-request-
 })
 export class HomeComponent {
 
-  protected requestService = inject(RequestService);
-  protected authSrv = inject(AuthService);
+  fb = inject(FormBuilder);
+  deliverySrv = inject(DeliveryService);
 
-  private modalService = inject(NgbModal);
+  result: any = null;
+  error = '';
 
-  refresh$ = new BehaviorSubject<void>(undefined);
+  form = this.fb.group({
+    chiaveConsegna: [''],
+    dataRitiro: ['']
+  });
 
+  search() {
 
-   request$ = this.authSrv.isAuthenticated$.pipe(
+    const value = this.form.value;
 
-    switchMap(isAuth => {
-
-      if (!isAuth) return of([]);
-
-      return this.refresh$.pipe(
-
-        switchMap(() =>
-          this.requestService.list().pipe(
-
-            catchError(err => {
-              console.error(err);
-              return of([]);
-            })
-
-          )
-        )
-
-      );
-    })
-  );
-
-  openAdd() {
-
-    const modalRef = this.modalService.open(AddRequestModal);
-
-    modalRef.result.then((result) => {
-
-      this.requestService.add(result).subscribe(() => {
-
-        this.refresh$.next();
-
-      });
-
-    }).catch(() => {});
-  }
-
-
-  deleteRequest(id: string) {
-
-    if (!confirm('Vuoi eliminare questa richiesta?')) return;
-
-    this.requestService.delete(id).subscribe(() => {
-      this.refresh$.next();
+    this.deliverySrv.tracking(
+      value.chiaveConsegna || '',
+      value.dataRitiro || ''
+    )
+    .subscribe({
+      next: (res) => {
+        this.result = res;
+        this.error = '';
+      },
+      error: () => {
+        this.error = 'Consegna non trovata';
+        this.result = null;
+      }
     });
-  }
-
-
-  approveRequest(id: string) {
-
-    this.requestService.approveRequest(id).subscribe(() => {
-      this.refresh$.next();
-    });
-  }
-
-
-  editRequest(request: any) {
-
-    const modalRef = this.modalService.open(AddRequestModal);
-
-    modalRef.componentInstance.dataInizio = request.dataInizio;
-    modalRef.componentInstance.dataFine = request.dataFine;
-    modalRef.componentInstance.categoriaId = request.categoriaId;
-
-    modalRef.result.then(result => {
-
-      this.requestService.update(request.id, result).subscribe(() => {
-        this.refresh$.next();
-      });
-
-    }).catch(() => {});
   }
 }

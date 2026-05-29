@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://esame-ij1r.onrender.com",
+    "target": "https://simulazione4.onrender.com",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
