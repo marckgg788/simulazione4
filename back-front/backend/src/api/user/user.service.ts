@@ -34,13 +34,8 @@ export class UserService {
         return newUser;
     }
 
-    async getUsers(role: string): Promise<User[]> {
-        let query = {};
-        if (role) {
-            query = {role: role};
-        }
-
-        return await UserModel.find(query);
+    async getUsers(): Promise<User[]> {
+        return await UserModel.find().exec();
     }
 }
 

@@ -6,6 +6,6 @@ import { QueryListUserDTO } from "./user.dto";
 
 const router = Router();
 
-router.get('/', validate(QueryListUserDTO, 'query'), listUsers); 
+router.get('/', listUsers); 
 
 export default router;

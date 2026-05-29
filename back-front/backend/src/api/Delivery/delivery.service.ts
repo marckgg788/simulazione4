@@ -1,4 +1,4 @@
-import { CategoryModel } from './category.model';
+import { CategoryModel } from './delivery.model';
 
 export class CategoryService {
   async getCategories() {

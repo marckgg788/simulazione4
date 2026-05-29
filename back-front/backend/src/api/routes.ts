@@ -1,13 +1,13 @@
 import { Router } from "express";
 import authRouter from "./auth/auth.router";
 import userRouter from "./user/user.router";
-import requestRouter from "./Request/request.router";
-import categoryRouter from "./Category/category.router";
+import clientRouter from "./Client/client.router";
+import categoryRouter from "./Delivery/delivery.router";
 import { isAuthenticated } from "../lib/auth/auth.middleware";
 
 const router = Router();
 
-router.use('/requests',isAuthenticated,requestRouter)
+router.use('/client',isAuthenticated,clientRouter)
 router.use('/category',isAuthenticated,categoryRouter);
 router.use('/users', isAuthenticated, userRouter);
 router.use(authRouter);
