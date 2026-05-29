@@ -23,7 +23,12 @@ export class HomeComponent {
 
   search() {
 
-    const value = this.form.value;
+  const value = this.form.value;
+
+  
+  const dataRitiro = value.dataRitiro
+    ? new Date(value.dataRitiro).toISOString()
+    : '';
 
     this.deliverySrv.tracking(
       value.chiaveConsegna || '',
