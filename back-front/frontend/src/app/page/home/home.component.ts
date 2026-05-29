@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { DeliveryService } from '../../service/delivery.service';
 import { FormBuilder } from '@angular/forms';
+import { Client } from '../../service/client.entity';
+import { ClientService } from '../../service/client.service';
 
 @Component({
   selector: 'app-home',
@@ -10,38 +12,26 @@ import { FormBuilder } from '@angular/forms';
 })
 export class HomeComponent {
 
-  fb = inject(FormBuilder);
-  deliverySrv = inject(DeliveryService);
+   private clientService = inject(ClientService);
 
-  result: any = null;
-  error = '';
+  clients: Client[] = [];
+  loading = false;
 
-  form = this.fb.group({
-    chiaveConsegna: [''],
-    dataRitiro: ['']
-  });
+  ngOnInit(): void {
+    this.loadClients();
+  }
 
-  search() {
+  loadClients() {
+    this.loading = true;
 
-  const value = this.form.value;
-
-  
-  const dataRitiro = value.dataRitiro
-    ? new Date(value.dataRitiro).toISOString()
-    : '';
-
-    this.deliverySrv.tracking(
-      value.chiaveConsegna || '',
-      value.dataRitiro || ''
-    )
-    .subscribe({
+    this.clientService.list().subscribe({
       next: (res) => {
-        this.result = res;
-        this.error = '';
+        this.clients = res;
+        this.loading = false;
       },
-      error: () => {
-        this.error = 'Consegna non trovata';
-        this.result = null;
+      error: (err) => {
+        console.error('Errore caricamento clienti', err);
+        this.loading = false;
       }
     });
   }

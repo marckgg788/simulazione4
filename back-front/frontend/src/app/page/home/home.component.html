@@ -1,37 +1,19 @@
-<h1>Tracking consegna</h1>
+<div class="page">
 
-<form [formGroup]="form" (ngSubmit)="search()">
+  <h1>Lista Clienti</h1>
 
-  <input
-    type="text"
-    formControlName="chiaveConsegna"
-    placeholder="Chiave tracking">
+  <p *ngIf="loading">Caricamento...</p>
 
-  <input
-    type="date"
-    formControlName="dataRitiro">
+  <table *ngIf="!loading">
+    <thead>
+      <tr>
+        <th>Nominativo</th>
+        <th>Via</th>
+        <th>Comune</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
 
-  <button type="submit">
-    Cerca
-  </button>
+  </table>
 
-</form>
-
-<p>ciao</p>
-
-<div *ngIf="result">
-
-  <h3>Stato:</h3>
-  <p>{{ result.stato }}</p>
-
-  <p>Ritiro: {{ result.dataRitiro }}</p>
-
-  <p *ngIf="result.dataConsegna">
-    Consegna: {{ result.dataConsegna }}
-  </p>
-
-</div>
-
-<div *ngIf="error">
-  {{ error }}
 </div>
