@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://simulazione4.onrender.com'
+  apiUrl: 'https://simulazione4.onrender.com/api'
 };
