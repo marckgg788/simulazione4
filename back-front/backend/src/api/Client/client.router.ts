@@ -7,11 +7,11 @@ import { createClient, deleteClient, getAllClients, getClientById, updateClient 
 const router = Router();
 
 
-router.get("/getAllClients",getAllClients);
-router.post("/createClient", validate(CreateClientDTO),createClient);
-router.get("/getClientById/:id", getClientById);
-router.put("/updateClient/:id", validate(UpdateClientDTO), updateClient);
-router.delete("/deleteClient/:id", deleteClient);
+router.get("/",getAllClients);
+router.post("/", validate(CreateClientDTO),createClient);
+router.get("/:id", getClientById);
+router.put("/:id", validate(UpdateClientDTO), updateClient);
+router.delete("/:id", deleteClient);
 
 
 export default router;

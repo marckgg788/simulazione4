@@ -1,27 +1,26 @@
 import { Schema, model } from 'mongoose';
+import { Deliveries } from './delivery.entity';
 
-export interface Category {
-  id?: string;
-  description: string;
-}
-
-const categorySchema = new Schema<Category>(
+const deliverySchema = new Schema<Deliveries>(
   {
-    description: { type: String, required: true },
+    clienteId: { type: String, required: true },
+    dataRitiro: { type: Date, required: true },
+    dataConsegna: { type: Date },
+    stato: { type: String, enum: ["Da ritirare", "In deposito", "In consegna", "Consegnata", "In giacenza"], required: true },
+    chiaveConsegna: { type: String, required: true },
   },
   {
     timestamps: true,
   }
 );
 
-categorySchema.set('toJSON', {
+deliverySchema.set('toJSON', {
   virtuals: true,
   transform: (_, ret) => {
   delete (ret as unknown as any)._id;
   delete (ret as unknown as any).__v;
-    delete ret.id;
     return ret;
   },
 });
 
-export const CategoryModel = model<Category>('Category', categorySchema);
+export const DeliveryModel = model<Deliveries>('Delivery', deliverySchema);
